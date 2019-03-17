@@ -124,6 +124,7 @@ router.post('/movies/add', function(req, res) {
                 if(movieGenre === null){res.status(401).send({success: false, message: 'Field genre empty'});}
                 var movieActors = req.body.actors;
                 if(movieActors === null || movieActors.count < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                console.log(movieTitle, movieGenre, movieYear, movieActors);
                 res.json({success: true, token: 'JWT ' + token});
             }
             else {
