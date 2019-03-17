@@ -118,14 +118,14 @@ router.post('/movies/add', function(req, res) {
                 var userToken = {id: user._id, username: user.username};
                 var token = jwt.sign(userToken, process.env.SECRET_KEY);
                 //Authenticated, we will now add the movie
-                movieNew.movieTitle = req.body.title;
-                if(!movieNew.movieTitle){res.status(401).send({success: false, message: 'Field title empty'});}
-                movieNew.movieYear = req.body.year;
-                if(!movieNew.movieYear){res.status(401).send({success: false, message: 'Field year empty'});}
-                movieNew.movieGenre = req.body.genre;
-                if(!movieNew.movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
-                movieNew.movieActors = req.body.actors;
-                if(movieNew.movieActors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                movieNew.title = req.body.title;
+                if(!movieNew.title){res.status(401).send({success: false, message: 'Field title empty'});}
+                movieNew.year = req.body.year;
+                if(!movieNew.year){res.status(401).send({success: false, message: 'Field year empty'});}
+                movieNew.genre = req.body.genre;
+                if(!movieNew.genre){res.status(401).send({success: false, message: 'Field genre empty'});}
+                movieNew.actors = req.body.actors;
+                if(movieNew.actors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
                 movieNew.save(function(err1) {
                     if (err1) {return res.send(err1);}
                     res.json({ success: true, message: 'Movie created!' });
