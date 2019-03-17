@@ -130,7 +130,7 @@ router.post('/movies/add', function(req, res) {
                     if (err) {
                         // duplicate entry
                         if (err.code == 11000)
-                            return res.json({ success: false, message: 'A movie with that username already exists. '});
+                            return res.json({ success: false, message: 'A movie with that name already exists. '});
                         else
                             return res.send(err);
                     }

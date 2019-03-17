@@ -22,13 +22,11 @@ var MovieSchema = new Schema({
 //save movie
 MovieSchema.pre('save', function(next) {
     var newMovie = this;
-    // generate the hash
-    newMovie.title = title;
-    newMovie.year = year;
-    newMovie.genre = genre;
-    newMovie.actors = actors;
-    if (err) return next(err);
-    next();
+
+    // save model to database
+    if (err) return console.error(err);
+    console.log(newMovie + " saved.");
+    
 });
 
 // return the model
