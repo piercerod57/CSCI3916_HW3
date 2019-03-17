@@ -95,6 +95,46 @@ router.post('/signin', function(req, res) {
 
     });
 });
+//Movies------------------------------------------
+//{
+//  "title": Title
+//  "year": Year released
+//  "genre": Genre  (Action,  Adventure,  Comedy,  Drama,  Fantasy,  Horror,  Mystery,  Thriller, Western)
+//  "actors": Array of three actors that were in the film(actorName, charName)
+//}
+router.post('/movies/add', function(req, res) {
+    var userNew = new User();
+    userNew.name = req.headers.name;
+    userNew.username = req.headers.username;
+    userNew.password = req.headers.password;
+
+    User.findOne({ username: userNew.username }).select('name username password').exec(function(err, user) {
+        if (err) res.send(err);
+
+        user.comparePassword(userNew.password, function(isMatch){
+            if (isMatch) {
+                var userToken = {id: user._id, username: user.username};
+                var token = jwt.sign(userToken, process.env.SECRET_KEY);
+                //Authenticated, we will now add the movie
+                var movieTitle = req.body.title;
+                if(movieTitle === null){res.status(401).send({success: false, message: 'Field title empty'});}
+                var movieYear = req.body.year;
+                if(movieYear === null){res.status(401).send({success: false, message: 'Field year empty'});}
+                var movieGenre = req.body.genre;
+                if(movieGenre === null){res.status(401).send({success: false, message: 'Field genre empty'});}
+                var movieActors = req.body.actors;
+                if(movieActors === null || movieActors.count < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                res.json({success: true, token: 'JWT ' + token});
+            }
+            else {
+                res.status(401).send({success: false, message: 'Authentication failed.'});
+            }
+        });
+
+
+    });
+});
+//------------------------------------------------
 
 app.use('/', router);
 if(!module.parent) {
