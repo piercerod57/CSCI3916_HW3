@@ -117,13 +117,13 @@ router.post('/movies/add', function(req, res) {
                 var token = jwt.sign(userToken, process.env.SECRET_KEY);
                 //Authenticated, we will now add the movie
                 var movieTitle = req.body.title;
-                if(movieTitle){res.status(401).send({success: false, message: 'Field title empty'});}
+                if(!movieTitle){res.status(401).send({success: false, message: 'Field title empty'});}
                 var movieYear = req.body.year;
-                if(movieYear){res.status(401).send({success: false, message: 'Field year empty'});}
+                if(!movieYear){res.status(401).send({success: false, message: 'Field year empty'});}
                 var movieGenre = req.body.genre;
-                if(movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
+                if(!movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
                 var movieActors = req.body.actors;
-                if(movieActors.count < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                if(!movieActors.count < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
                 console.log(movieTitle, movieGenre, movieYear, movieActors);
                 res.json({success: true, token: 'JWT ' + token});
             }
