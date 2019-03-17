@@ -137,6 +137,24 @@ router.post('/movies/add', function(req, res) {
         });
     });
 });
+
+router.put('/movies/update', function(req, res) {
+    
+});
+
+
+router.get('/movies/get', function(req, res) {
+    movie.find(function (err, movies) {
+        if (err) res.send(err);
+        // return the movies
+        res.json(movies);
+    });
+});
+
+
+router.delete('/movies/delete', function(req, res) {
+
+});
 //------------------------------------------------
 
 app.use('/', router);
