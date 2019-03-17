@@ -126,15 +126,10 @@ router.post('/movies/add', function(req, res) {
                 if(!movieNew.movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
                 movieNew.movieActors = req.body.actors;
                 if(movieNew.movieActors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
-                movieNew.save(function(err) {
-                    if (err) {
-                        // duplicate entry
-                        if (err.code == 11000)
-                            return res.json({ success: false, message: 'A movie with that name already exists. '});
-                        else
-                            return res.send(err);
+                movieNew.save(function(err1) {
+                    if (err1) {
+                        return res.send(err1);
                     }
-
                     res.json({ success: true, message: 'Movie created!' });
                 });
             }

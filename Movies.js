@@ -13,21 +13,21 @@ mongoose.set('useCreateIndex', true);
 //  "actors": Array of three actors that were in the film(actorName, charName)
 //}
 var MovieSchema = new Schema({
-    title: String,
-    year: Number,
-    genre: ['Action',  'Adventure',  'Comedy',  'Drama',  'Fantasy',  'Horror',  'Mystery',  'Thriller', 'Western'],
-    actors: []
+    title: {type: String, required: true, index: { unique: true}},
+    year: {type: Number, required: true},
+    genre: {type: String, enum: ['Action',  'Adventure',  'Comedy',  'Drama',  'Fantasy',  'Horror',  'Mystery',  'Thriller', 'Western'], required: true},
+    actors: {type: [], required: true}
 });
 
 //save movie
-MovieSchema.pre('save', function(next) {
+/*MovieSchema.pre('save', function(next) {
     //var newMovie = this;
 
     // save model to database
     if (err) return err;
     console.log(newMovie + " saved.");
 
-});
+});*/
 
 // return the model
 module.exports = mongoose.model('Movies', MovieSchema);
