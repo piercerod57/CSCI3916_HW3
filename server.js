@@ -127,9 +127,7 @@ router.post('/movies/add', function(req, res) {
                 movieNew.movieActors = req.body.actors;
                 if(movieNew.movieActors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
                 movieNew.save(function(err1) {
-                    if (err1) {
-                        return res.send(err1);
-                    }
+                    if (err1) {return res.send(err1);}
                     res.json({ success: true, message: 'Movie created!' });
                 });
             }

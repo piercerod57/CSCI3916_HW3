@@ -18,6 +18,8 @@ var MovieSchema = new Schema({
     genre: {type: String, enum: ['Action',  'Adventure',  'Comedy',  'Drama',  'Fantasy',  'Horror',  'Mystery',  'Thriller', 'Western'], required: true},
     actors: {type: [], required: true}
 });
+//var Movies = mongoose.model('Movie', MovieSchema, 'movies');
+
 
 //save movie
 /*MovieSchema.pre('save', function(next) {
