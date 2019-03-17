@@ -21,12 +21,12 @@ var MovieSchema = new Schema({
 
 //save movie
 MovieSchema.pre('save', function(next) {
-    var newMovie = this;
+    //var newMovie = this;
 
     // save model to database
-    if (err) return console.error(err);
+    if (err) return err;
     console.log(newMovie + " saved.");
-    
+
 });
 
 // return the model
