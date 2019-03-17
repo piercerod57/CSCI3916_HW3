@@ -4,6 +4,7 @@ var passport = require('passport');
 var authJwtController = require('./auth_jwt');
 var User = require('./Users');
 var jwt = require('jsonwebtoken');
+var movie = require('./Movies');
 
 var app = express();
 module.exports = app; // for testing
@@ -104,6 +105,7 @@ router.post('/signin', function(req, res) {
 //}
 router.post('/movies/add', function(req, res) {
     var userNew = new User();
+    var movieNew = new movie();
     userNew.name = req.headers.name;
     userNew.username = req.headers.username;
     userNew.password = req.headers.password;
@@ -116,23 +118,30 @@ router.post('/movies/add', function(req, res) {
                 var userToken = {id: user._id, username: user.username};
                 var token = jwt.sign(userToken, process.env.SECRET_KEY);
                 //Authenticated, we will now add the movie
-                var movieTitle = req.body.title;
-                if(!movieTitle){res.status(401).send({success: false, message: 'Field title empty'});}
-                var movieYear = req.body.year;
-                if(!movieYear){res.status(401).send({success: false, message: 'Field year empty'});}
-                var movieGenre = req.body.genre;
-                if(!movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
-                var movieActors = req.body.actors;
-                if(movieActors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
-                
-                res.json({success: true, token: 'JWT ' + token});
+                movieNew.movieTitle = req.body.title;
+                if(!movieNew.movieTitle){res.status(401).send({success: false, message: 'Field title empty'});}
+                movieNew.movieYear = req.body.year;
+                if(!movieNew.movieYear){res.status(401).send({success: false, message: 'Field year empty'});}
+                movieNew.movieGenre = req.body.genre;
+                if(!movieNew.movieGenre){res.status(401).send({success: false, message: 'Field genre empty'});}
+                movieNew.movieActors = req.body.actors;
+                if(movieNew.movieActors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                movieNew.save(function(err) {
+                    if (err) {
+                        // duplicate entry
+                        if (err.code == 11000)
+                            return res.json({ success: false, message: 'A movie with that username already exists. '});
+                        else
+                            return res.send(err);
+                    }
+
+                    res.json({ success: true, message: 'Movie created!' });
+                });
             }
             else {
                 res.status(401).send({success: false, message: 'Authentication failed.'});
             }
         });
-
-
     });
 });
 //------------------------------------------------
