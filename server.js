@@ -161,11 +161,12 @@ router.put('/movies/update', function(req, res) {
                 if(!movieNew.genre){res.status(401).send({success: false, message: 'Field genre empty'});}
                 movieNew.actors = req.body.actors;
                 if(movieNew.actors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                const doc = movie.findOne({title: movieNew.title});
                 //We will now update the movie with the info passed into the heade
-                    movieNew.save(function(err1) {
-                        if (err1) {return res.send(err1);}
-                        res.json({ success: true, message: 'Movie updated!' });
-                    });
+                    movie.update({_id: doc._id}, { title: movieNew.title, year: movieNew.year, genre: movieNew.genre, actors: movieNew.actors});
+                    if (err) {res.send(err)};
+                    res.json({ success: true, message: 'Movie updated!' });
+
             } else {
                 res.status(401).send({success: false, message: 'Authentication failed.'});
             }
