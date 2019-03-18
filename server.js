@@ -187,7 +187,41 @@ router.get('/movies/get', function(req, res) {
 
 
 router.delete('/movies/delete', function(req, res) {
+    var userNew = new User();
+    var movieNew = new movie();
+    userNew.name = req.headers.name;
+    userNew.username = req.headers.username;
+    userNew.password = req.headers.password;
 
+    User.findOne({ username: userNew.username }).select('name username password').exec(function(err, user) {
+        if (err) res.send(err);
+
+        user.comparePassword(userNew.password, function(isMatch){
+            if (isMatch) {
+                var userToken = {id: user._id, username: user.username};
+                var token = jwt.sign(userToken, process.env.SECRET_KEY);
+                //Authenticated
+                movieNew.title = req.body.title;
+                if(!movieNew.title){res.status(401).send({success: false, message: 'Field title empty'});}
+                movieNew.year = req.body.year;
+                if(!movieNew.year){res.status(401).send({success: false, message: 'Field year empty'});}
+                movieNew.genre = req.body.genre;
+                if(!movieNew.genre){res.status(401).send({success: false, message: 'Field genre empty'});}
+                movieNew.actors = req.body.actors;
+                if(movieNew.actors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
+                var doc = movie.findOne({title: movieNew.title});
+                //We will now update the movie with the info passed into the heade
+                movie.findOneAndDelete({title: movieNew.title}, function(err) {
+                    if (err) {
+                        res.send(err)
+                    }
+                    res.json({success: true, message: 'Movie deleted!'});
+                });
+            } else {
+                res.status(401).send({success: false, message: 'Authentication failed.'});
+            }
+        });
+    });
 });
 //------------------------------------------------
 
