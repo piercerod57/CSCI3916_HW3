@@ -163,7 +163,7 @@ router.put('/movies/update', function(req, res) {
                 if(movieNew.actors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
                 const doc = movie.findOne({title: movieNew.title});
                 //We will now update the movie with the info passed into the heade
-                    movie.save({_id: doc._id}, { title: movieNew.title, year: movieNew.year, genre: movieNew.genre, actors: movieNew.actors}, function(err) {
+                    doc.save({_id: doc._id}, { title: movieNew.title, year: movieNew.year, genre: movieNew.genre, actors: movieNew.actors}, function(err) {
                         if (err) {
                             res.send(err)
                         }
