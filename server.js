@@ -162,7 +162,7 @@ router.put('/movies/update', function(req, res) {
                 movieNew.actors = req.body.actors;
                 if(movieNew.actors.length < 3){res.status(401).send({success: false, message: 'Field actors invalid'});}
                 //We will now update the movie with the info passed into the heade
-                    await movieNew.save(function(err1) {
+                    movieNew.save(function(err1) {
                         if (err1) {return res.send(err1);}
                         res.json({ success: true, message: 'Movie updated!' });
                     });
